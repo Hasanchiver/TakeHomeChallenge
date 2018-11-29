@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <StackPanel HorizontalAlignment = "Left" Width="554">
+        <StackPanel Margin="10,0,292,0">
 
             <ItemsControl ItemsSource = "{Binding Path = People}">
 
@@ -20,7 +20,9 @@
                             <TextBox Text = "{Binding Path = Address, Mode = TwoWay}" 
                         Width = "100" Margin = "0 5 3 5"/>
 
-                            <TextBlock Text = "{Binding Path = Telephone, Mode = OneWay}" 
+                            <TextBox Text = "{Binding Path = Telephone, Mode = TwoWay}" 
+                        Margin = "0 5 3 5"/>
+                            <TextBlock Text = "{Binding Path = IsActive, Mode = OneWay}" 
                         Margin = "0 5 3 5"/>
 
                         </StackPanel>
@@ -28,8 +30,8 @@
                 </ItemsControl.ItemTemplate>
 
             </ItemsControl>
-            <Button Content="Browse" Click="button1_Click" Margin="0,0,479,0" MinWidth="75" Width="58" Height="29" />
 
         </StackPanel>
+        <Button Content="Browse" Click="button1_Click" Margin="513,379,155,0" MinWidth="75" RenderTransformOrigin="1.998,4.375" />
     </Grid>
 </UserControl>

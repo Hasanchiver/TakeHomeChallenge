@@ -16,6 +16,7 @@ namespace TakeHomeChallenge.Model
         private string name;
         private string address;
         private string telephone;
+        private bool isActive;
 
 
         public string FirstName
@@ -58,7 +59,22 @@ namespace TakeHomeChallenge.Model
                 return firstName + " " + lastName;
             }
         }
+        public bool IsActive
+        {
+            get
+            {
+                return isActive;
+            }
 
+            set
+            {
+                if (isActive != value)
+                {
+                    isActive = value;
+                    RaisePropertyChanged("IsActive");
+                }
+            }
+        }
         public string Name
         {
             get

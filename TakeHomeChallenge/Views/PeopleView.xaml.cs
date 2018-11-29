@@ -33,29 +33,24 @@ namespace TakeHomeChallenge.Views
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            // Create OpenFileDialog 
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
 
 
 
-            // Set filter for file extension and default file extension 
             dlg.DefaultExt = ".*";
             dlg.Filter = "All Files (*.*)|*.*";
 
 
-            // Display OpenFileDialog by calling ShowDialog method 
             Nullable<bool> result = dlg.ShowDialog();
 
 
-            // Get the selected file name and display in a TextBox 
             if (result == true)
             {
                 List<People> peeps = new List<People>();
 
-                // Open document 
                 string filename = dlg.FileName;
                 try
-                {   // Open the text file using a stream reader.
+                {   
                     using (StreamReader sr = new StreamReader(filename))
                     {
 
@@ -82,6 +77,7 @@ namespace TakeHomeChallenge.Views
             a.Name = s.Split(',')[0].Trim(' ');
             a.Address = s.Split(',')[1].Trim(' ');
             a.Telephone = s.Split(',')[2].Trim(' ');
+            a.IsActive = Convert.ToBoolean(s.Split(',')[3].Trim(' '));
             return a;
         }
     }
