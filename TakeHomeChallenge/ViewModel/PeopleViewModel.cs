@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using TakeHomeChallenge.Model;
@@ -17,11 +18,28 @@ namespace TakeHomeChallenge.ViewModel
         public ICommand AddCommand { get; private set; }
         public ICommand BrowseCommand { get; private set; }
         public ICommand SaveCommand { get; private set; }
-        public ICommand SortCommand { get; private set; }
+        public ICommand DeleteCommand { get; private set; }
+        public ICommand ChangeTheme { get; private set; }
+        private Person selectedPerson;
 
-        public ObservableCollection<People> People { get; set; } = new ObservableCollection<People>();
+        public ObservableCollection<Person> People { get; set; } = new ObservableCollection<Person>();
 
-        public People SelectedPerson { get; set; }
+        public Person SelectedPerson
+        {
+            get
+            {
+                return selectedPerson;
+            }
+
+            set
+            {
+                if (selectedPerson != value)
+                {
+                    selectedPerson = value;
+                    OnPropertyChanged("SelectedPerson");
+                }
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -29,128 +47,90 @@ namespace TakeHomeChallenge.ViewModel
 
         public PeopleViewModel()
         {
-            AddCommand = new AddPeopleCommand(this);
-            BrowseCommand = new BrowseFileCommand(this);
-            SaveCommand = new SaveFileCommand(this);
+            AddCommand = new Command(AddPerson);
+            BrowseCommand = new Command(BrowseFile);
+            SaveCommand = new Command(SaveFile);
+            DeleteCommand = new Command(DeletePerson);
+            ChangeTheme = new Command(ChangeThemeCommand);
         }
 
-        public void AddPeople(List<People> list)
+        public void ChangeThemeCommand(object theme)
         {
-            foreach (People p in list)
-            {
-                People.Add(p);
-            }
+            Uri uri = new Uri("pack://application:,,,/PresentationFramework.Aero;component/themes/Aero.NormalColor.xaml");
+
+            var currentApp = Application.Current as App;
+            currentApp.ChangeTheme(uri);
         }
-
-        class BrowseFileCommand : ICommand
+        public void DeletePerson(object person)
         {
-            PeopleViewModel parent;
-
-            public BrowseFileCommand(PeopleViewModel parent)
+            this.People.Remove((Person)person);
+        }
+        public void BrowseFile(object parameter)
+        {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog
             {
-                this.parent = parent;
-                parent.PropertyChanged += delegate { CanExecuteChanged?.Invoke(this, EventArgs.Empty); };
-            }
-
-            public event EventHandler CanExecuteChanged;
-
-            public bool CanExecute(object parameter) { return true; }
-
-            public void Execute(object parameter)
+                DefaultExt = ".*",
+                Filter = "All Files (*.*)|*.*"
+            };
+            
+            Nullable<bool> result = dlg.ShowDialog();
+            
+            if (result == true)
             {
-                Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-
-                dlg.DefaultExt = ".*";
-                dlg.Filter = "All Files (*.*)|*.*";
-
-
-                Nullable<bool> result = dlg.ShowDialog();
-
-
-                if (result == true)
+                this.People.Clear();
+                string filename = dlg.FileName;
+                try
                 {
-                    List<People> peeps = new List<People>();
-
-                    string filename = dlg.FileName;
-                    try
+                    using (StreamReader sr = new StreamReader(filename))
                     {
-                        using (StreamReader sr = new StreamReader(filename))
+
+                        string line;
+                        while ((line = sr.ReadLine()) != null)
                         {
-
-                            string line;
-                            while ((line = sr.ReadLine()) != null)
-                            {
-                                peeps.Add(ParseLineIntoPeople(line));
-                            }
-                            Console.WriteLine(line);
+                            this.People.Add(ParseLineIntoPeople(line));
                         }
-                        parent.People.Clear();
-                        parent.AddPeople(peeps);
-                    }
-                    catch (Exception a)
-                    {
-                        Console.WriteLine("The file could not be read:");
-                        Console.WriteLine(a.Message);
-                    }
+                        Console.WriteLine(line);
+                    }                  
                 }
-            }
-            private People ParseLineIntoPeople(string s)
-            {
-                People a = new People();
-                a.Name = s.Split(',')[0].Trim(' ');
-                a.Address = s.Split(',')[1].Trim(' ');
-                a.Telephone = s.Split(',')[2].Trim(' ');
-                a.IsActive = Convert.ToBoolean(s.Split(',')[3].Trim(' '));
-                return a;
-            }
-        }
-        class SaveFileCommand : ICommand
-        {
-            PeopleViewModel parent;
-
-            public SaveFileCommand(PeopleViewModel parent)
-            {
-                this.parent = parent;
-                parent.PropertyChanged += delegate { CanExecuteChanged?.Invoke(this, EventArgs.Empty); };
-            }
-
-            public event EventHandler CanExecuteChanged;
-
-            public bool CanExecute(object parameter) { return true; }
-
-            public void Execute(object parameter)
-            {
-                Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
-                List<string> entries = new List<string>();
-                foreach (People p in parent.People)
+                catch (Exception a)
                 {
-                    entries.Add(String.Format("{0},   {1},   {2},   {3}", p.Name, p.Address, p.Telephone, p.IsActive));
+                    Console.WriteLine("The file could not be read:");
+                    Console.WriteLine(a.Message);
                 }
-                if (saveFileDialog.ShowDialog() == true)
-                    File.WriteAllLines(saveFileDialog.FileName, entries);
             }
- 
         }
-        class AddPeopleCommand : ICommand
+        public void AddPerson(object parameter)
         {
-            PeopleViewModel parent;
-
-            public AddPeopleCommand(PeopleViewModel parent)
-            {
-                this.parent = parent;
-                parent.PropertyChanged += delegate { CanExecuteChanged?.Invoke(this, EventArgs.Empty); };
-            }
-
-            public event EventHandler CanExecuteChanged;
-
-            public bool CanExecute(object parameter) { return true; }
-
-            public void Execute(object parameter)
-            {
-                People p = new People();
-                parent.People.Add(p);
-            }
+            Person p = new Person();
+            this.People.Add(p);
         }
+        public void SaveFile(object parameter)
+        {
+            Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog
+            {
+                DefaultExt = ".txt",
+                Filter = "Text files (*.txt)|*.txt| All Files (*.*)|*.*"
+
+            };
+            List<string> entries = new List<string>();
+            foreach (Person p in this.People)
+            {
+                // Used more space in format than Data.txt to accommodate for possibly longer Names and Addresses
+                entries.Add(String.Format("{0, -10}{1, -20}{2, -12}{3}", p.Name + ',', p.Address + ',', p.Telephone + ',', p.IsActive));
+            }
+            if (saveFileDialog.ShowDialog() == true)
+                File.WriteAllLines(saveFileDialog.FileName, entries);
+        }
+        private Person ParseLineIntoPeople(string s)
+        {
+            Person a = new Person();
+            a.Name = s.Split(',')[0].Trim(' ');
+            a.Address = s.Split(',')[1].Trim(' ');
+            a.Telephone = s.Split(',')[2].Trim(' ');
+            a.IsActive = Convert.ToBoolean(s.Split(',')[3].Trim(' '));
+            return a;
+        }
+               
 
         private void OnPropertyChanged(string propertyName = null)
         {

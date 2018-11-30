@@ -9,7 +9,7 @@ namespace TakeHomeChallenge.Model
 {
     public class PeopleModel { }
 
-    public class People : INotifyPropertyChanged
+    public class Person : INotifyPropertyChanged
     {
         
         private string name;
@@ -19,7 +19,7 @@ namespace TakeHomeChallenge.Model
 
 
        
-        public People()
+        public Person()
         {
             isActive = true;
         }

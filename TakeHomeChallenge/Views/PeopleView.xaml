@@ -13,11 +13,11 @@
             <ColumnDefinition />
             <ColumnDefinition Width="70" />
         </Grid.ColumnDefinitions>
-        <DataGrid CanUserAddRows="False" AutoGenerateColumns="False" Grid.Column="0" ItemsSource="{Binding People}" SelectedItem="{Binding SelectedPerson, Mode=TwoWay}" >
+        <DataGrid SelectionMode="Single" CanUserAddRows="False" AutoGenerateColumns="False" Grid.Column="0" ItemsSource="{Binding People}" SelectedItem="{Binding SelectedPerson, Mode=TwoWay}" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Address" Binding="{Binding Address}"/>
-                <DataGridTextColumn Header="Telephone" Binding="{Binding Telephone}"/>
+                <DataGridTextColumn Header="Telephone" Binding="{Binding Telephone}" />
             </DataGrid.Columns>
             
             <DataGrid.ItemContainerStyle>
@@ -37,7 +37,8 @@
             <Button Content="Save" Command="{Binding SaveCommand}" />
             <Button Content="Browse" Command="{Binding BrowseCommand}" />
             <Button Content="New" Command="{Binding AddCommand}" />
-            <Button Content="Delete" Command="{Binding DeleteCommand}"/>
+            <Button Content="Delete" Command="{Binding DeleteCommand}" CommandParameter="{Binding SelectedPerson}"/>
+            <Button Content="Theme" Command="{Binding ChangeTheme}"/>
         </StackPanel>
         
     </Grid>
