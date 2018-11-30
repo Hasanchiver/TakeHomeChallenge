@@ -14,14 +14,14 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation = "Horizontal">
-                            <TextBox Text = "{Binding Path = Name, Mode = TwoWay}" 
+                            <TextBox IsEnabled="{Binding IsActive}" Text = "{Binding Path = Name, Mode = TwoWay}" 
                         Width = "100" Margin = "3 5 3 5"/>
 
-                            <TextBox Text = "{Binding Path = Address, Mode = TwoWay}" 
+                            <TextBox IsEnabled="{Binding IsActive}" Text = "{Binding Path = Address, Mode = TwoWay}" 
                         Width = "100" Margin = "0 5 3 5"/>
 
-                            <TextBox Text = "{Binding Path = Telephone, Mode = TwoWay}" 
-                        Margin = "0 5 3 5"/>
+                            <TextBox IsEnabled="{Binding IsActive}" Text = "{Binding Path = Telephone, Mode = TwoWay}" 
+                        Width = "100" Margin = "0 5 3 5"/>
                             <TextBlock Text = "{Binding Path = IsActive, Mode = OneWay}" 
                         Margin = "0 5 3 5"/>
 
@@ -32,6 +32,10 @@
             </ItemsControl>
 
         </StackPanel>
-        <Button Content="Browse" Click="button1_Click" Margin="513,379,155,0" MinWidth="75" RenderTransformOrigin="1.998,4.375" />
+        <Button Content="Sort" Command="{Binding SortCommand}" Margin="513,349,155,35" MinWidth="75" />
+
+        <Button Content="Save" Command="{Binding SaveCommand}" Margin="513,149,155,235" MinWidth="75" />
+        <Button Content="Browse" Command="{Binding BrowseCommand}" Margin="513,215,155,169" MinWidth="75" />
+        <Button Content="New" Command="{Binding AddCommand}" Margin="513,281,155,101" MinWidth="75" />
     </Grid>
 </UserControl>

@@ -11,54 +11,20 @@ namespace TakeHomeChallenge.Model
 
     public class People : INotifyPropertyChanged
     {
-        private string firstName;
-        private string lastName;
+        
         private string name;
         private string address;
         private string telephone;
         private bool isActive;
 
 
-        public string FirstName
+       
+        public People()
         {
-            get
-            {
-                return firstName;
-            }
-
-            set
-            {
-                if (firstName != value)
-                {
-                    firstName = value;
-                    RaisePropertyChanged("FirstName");
-                    RaisePropertyChanged("FullName");
-                }
-            }
+            isActive = true;
         }
+        
 
-        public string LastName
-        {
-            get { return lastName; }
-
-            set
-            {
-                if (lastName != value)
-                {
-                    lastName = value;
-                    RaisePropertyChanged("LastName");
-                    RaisePropertyChanged("FullName");
-                }
-            }
-        }
-
-        public string FullName
-        {
-            get
-            {
-                return firstName + " " + lastName;
-            }
-        }
         public bool IsActive
         {
             get
@@ -128,10 +94,7 @@ namespace TakeHomeChallenge.Model
 
         private void RaisePropertyChanged(string property)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
         }
     }
 }
