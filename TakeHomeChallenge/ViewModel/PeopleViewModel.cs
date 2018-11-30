@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 using TakeHomeChallenge.Model;
 
@@ -20,6 +21,8 @@ namespace TakeHomeChallenge.ViewModel
 
         public ObservableCollection<People> People { get; set; } = new ObservableCollection<People>();
 
+        public People SelectedPerson { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
 
@@ -29,7 +32,6 @@ namespace TakeHomeChallenge.ViewModel
             AddCommand = new AddPeopleCommand(this);
             BrowseCommand = new BrowseFileCommand(this);
             SaveCommand = new SaveFileCommand(this);
-            SortCommand = new SortPeopleCommand(this);
         }
 
         public void AddPeople(List<People> list)
@@ -149,31 +151,13 @@ namespace TakeHomeChallenge.ViewModel
                 parent.People.Add(p);
             }
         }
-        class SortPeopleCommand : ICommand
-        {
-            PeopleViewModel parent;
-
-            public SortPeopleCommand(PeopleViewModel parent)
-            {
-                this.parent = parent;
-                parent.PropertyChanged += delegate { CanExecuteChanged?.Invoke(this, EventArgs.Empty); };
-            }
-
-            public event EventHandler CanExecuteChanged;
-
-            public bool CanExecute(object parameter) { return true; }
-
-            public void Execute(object parameter)
-            {
-                parent.People.OrderBy(p => p.Name);
-            }
-        }
-
 
         private void OnPropertyChanged(string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+       
+
     }
     
 }

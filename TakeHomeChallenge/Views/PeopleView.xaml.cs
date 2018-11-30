@@ -26,7 +26,6 @@ namespace TakeHomeChallenge.Views
         {
             InitializeComponent();
             this.DataContext = new TakeHomeChallenge.ViewModel.PeopleViewModel();
-
         }
      
     }

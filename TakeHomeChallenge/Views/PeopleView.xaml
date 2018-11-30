@@ -6,36 +6,39 @@
              xmlns:local="clr-namespace:TakeHomeChallenge.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    
     <Grid>
-        <StackPanel Margin="10,0,292,0">
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="70" />
+        </Grid.ColumnDefinitions>
+        <DataGrid CanUserAddRows="False" AutoGenerateColumns="False" Grid.Column="0" ItemsSource="{Binding People}" SelectedItem="{Binding SelectedPerson, Mode=TwoWay}" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Address" Binding="{Binding Address}"/>
+                <DataGridTextColumn Header="Telephone" Binding="{Binding Telephone}"/>
+            </DataGrid.Columns>
+            
+            <DataGrid.ItemContainerStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsActive}" Value="False">
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.ItemContainerStyle>
 
-            <ItemsControl ItemsSource = "{Binding Path = People}">
+            
+        </DataGrid>
 
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation = "Horizontal">
-                            <TextBox IsEnabled="{Binding IsActive}" Text = "{Binding Path = Name, Mode = TwoWay}" 
-                        Width = "100" Margin = "3 5 3 5"/>
-
-                            <TextBox IsEnabled="{Binding IsActive}" Text = "{Binding Path = Address, Mode = TwoWay}" 
-                        Width = "100" Margin = "0 5 3 5"/>
-
-                            <TextBox IsEnabled="{Binding IsActive}" Text = "{Binding Path = Telephone, Mode = TwoWay}" 
-                        Width = "100" Margin = "0 5 3 5"/>
-                            <TextBlock Text = "{Binding Path = IsActive, Mode = OneWay}" 
-                        Margin = "0 5 3 5"/>
-
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-
-            </ItemsControl>
-
+        <StackPanel Grid.Column="1">
+            <Button Content="Save" Command="{Binding SaveCommand}" />
+            <Button Content="Browse" Command="{Binding BrowseCommand}" />
+            <Button Content="New" Command="{Binding AddCommand}" />
+            <Button Content="Delete" Command="{Binding DeleteCommand}"/>
         </StackPanel>
-        <Button Content="Sort" Command="{Binding SortCommand}" Margin="513,349,155,35" MinWidth="75" />
-
-        <Button Content="Save" Command="{Binding SaveCommand}" Margin="513,149,155,235" MinWidth="75" />
-        <Button Content="Browse" Command="{Binding BrowseCommand}" Margin="513,215,155,169" MinWidth="75" />
-        <Button Content="New" Command="{Binding AddCommand}" Margin="513,281,155,101" MinWidth="75" />
+        
     </Grid>
 </UserControl>
