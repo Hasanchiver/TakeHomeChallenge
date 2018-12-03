@@ -27,8 +27,6 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-                
-                
             </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>

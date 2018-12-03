@@ -16,14 +16,16 @@ namespace TakeHomeChallenge.ViewModel
 
     public class MainWindowViewModel : INotifyPropertyChanged
     {
-        private PeopleViewModel _model;
-        private string _fileName;
+        protected PeopleViewModel _model;
+        protected string _fileName;
+        protected Theme _currentTheme;
 
-        public ICommand BrowseCommand { get; private set; }
-        public ICommand SaveAsCommand { get; private set; }
-        public ICommand ChangeThemeCommand { get; private set; }
-        public ICommand SaveCommand { get; private set; }
-        private Theme _currentTheme;
+        public ICommand BrowseCommand { get; protected set; }
+        public ICommand SaveAsCommand { get; protected set; }
+        public ICommand ChangeThemeCommand { get; protected set; }
+        public ICommand SaveCommand { get; protected set; }
+        public ICommand ExitCommand { get; protected set; }
+
         public ObservableCollection<Theme> Themes { get; set; } = new ObservableCollection<Theme>();
         public PeopleViewModel Model {
             get { return _model; }
@@ -37,6 +39,7 @@ namespace TakeHomeChallenge.ViewModel
                 }
             }
         }
+        
 
         //Constructor
         public MainWindowViewModel()
@@ -45,19 +48,20 @@ namespace TakeHomeChallenge.ViewModel
             Themes.Add(new Theme("Aero", "/PresentationFramework.Aero;component/themes/Aero.NormalColor.xaml"));
             Themes.Add(new Theme("Classic", "/PresentationFramework.Classic;component/themes/Classic.xaml"));
             Themes.Add(new Theme("Luna", "/PresentationFramework.Luna;component/themes/Luna.normalcolor.xaml"));
+            _currentTheme = Themes[0];
 
             BrowseCommand = new Command(BrowseFile);
             SaveAsCommand = new Command(SaveFileAs);
             ChangeThemeCommand = new Command(ChangeTheme);
             SaveCommand = new Command(SaveFile);
-
+            ExitCommand = new Command(Exit);
             _model = new PeopleViewModel();
 
         }
 
 
         //Commands
-        public void SaveFileAs(object parameter)
+        protected void SaveFileAs(object parameter)
         {
             Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog
             {
@@ -69,14 +73,10 @@ namespace TakeHomeChallenge.ViewModel
             {
                 _fileName = saveFileDialog.FileName;
                 WriteToFile(_fileName);
-            }
-                
-            
+            }        
         }
-        public void BrowseFile(object parameter)
+        protected void BrowseFile(object parameter)
         {
-           
-
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog
             {
                 DefaultExt = ".*",
@@ -89,7 +89,7 @@ namespace TakeHomeChallenge.ViewModel
                 ReadFile(_fileName);
             }
         }
-        public void ChangeTheme(object theme)
+        protected void ChangeTheme(object theme)
         {
             Uri uri;
             if ((string)theme == null)
@@ -105,7 +105,7 @@ namespace TakeHomeChallenge.ViewModel
             }
             ChangeTheme(uri);
         }
-        public void SaveFile(object parameter)
+        protected void SaveFile(object parameter)
         {
             if (_fileName != null)
             {
@@ -114,10 +114,13 @@ namespace TakeHomeChallenge.ViewModel
             else
                 SaveFileAs(null);
         }
-
+        protected void Exit(object parameter)
+        {
+            Application.Current.Shutdown();
+        }
 
         //Helper Methods
-        private void ReadFile(string fileName)
+        protected void ReadFile(string fileName)
         {
 
             _model.People.Clear();
@@ -140,7 +143,7 @@ namespace TakeHomeChallenge.ViewModel
                 Console.WriteLine(a.Message);
             }
         }
-        private Person ParseLineIntoPeople(string s)
+        protected Person ParseLineIntoPeople(string s)
         {
             Person a = new Person();
             a.Name = s.Split(',')[0].Trim(' ');
@@ -149,13 +152,13 @@ namespace TakeHomeChallenge.ViewModel
             a.IsActive = Convert.ToBoolean(s.Split(',')[3].Trim(' '));
             return a;
         }
-        private void ChangeTheme(Uri uri)
+        protected void ChangeTheme(Uri uri)
         {
             var currentApp = Application.Current as App;
             currentApp.Resources.MergedDictionaries.Clear();
             currentApp.Resources.MergedDictionaries.Add(new ResourceDictionary() { Source = uri });
         }
-        private void WriteToFile(string filename)
+        protected void WriteToFile(string filename)
         {
             List<string> entries = new List<string>();
             foreach (Person p in _model.People)
