@@ -8,8 +8,3 @@ Name,    Address,    Telephone#,  isActive(true or false)
 Application allows users to create new, edit, and delete each entry in the table and save file to system.
 Application allows users to change theme of the application.  
 
-
-Note:
-Inactive items are grayed out, but editable. This was a design choice because the requirements only mentioned greying out inactive items.
-
-
