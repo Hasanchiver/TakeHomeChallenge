@@ -8,6 +8,7 @@ using System.Windows.Input;
 
 namespace TakeHomeChallenge.ViewModel
 {
+    //Generic Command Class
     public class Command : System.Windows.Input.ICommand
     {
         readonly Action<object> _execute;

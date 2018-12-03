@@ -7,37 +7,34 @@ using System.Threading.Tasks;
 
 namespace TakeHomeChallenge.Model
 {
-    public class PeopleModel { }
 
     public class Person : INotifyPropertyChanged
     {
         
-        private string name;
-        private string address;
-        private string telephone;
-        private bool isActive;
+        private string _name;
+        private string _address;
+        private string _telephone;
+        private bool _isActive;
 
-
-       
+        //Constructor
         public Person()
         {
-            isActive = true;
+            _isActive = true;
         }
-        
 
         public bool IsActive
         {
             get
             {
-                return isActive;
+                return _isActive;
             }
 
             set
             {
-                if (isActive != value)
+                if (_isActive != value)
                 {
-                    isActive = value;
-                    RaisePropertyChanged("IsActive");
+                    _isActive = value;
+                    OnPropertyChanged("IsActive");
                 }
             }
         }
@@ -45,15 +42,15 @@ namespace TakeHomeChallenge.Model
         {
             get
             {
-                return name;
+                return _name;
             }
 
             set
             {
-                if (name != value)
+                if (_name != value)
                 {
-                    name = value;
-                    RaisePropertyChanged("Name");
+                    _name = value;
+                    OnPropertyChanged("Name");
                 }
             }
         }
@@ -61,15 +58,15 @@ namespace TakeHomeChallenge.Model
         {
             get
             {
-                return address;
+                return _address;
             }
 
             set
             {
-                if (address != value)
+                if (_address != value)
                 {
-                    address = value;
-                    RaisePropertyChanged("Address");
+                    _address = value;
+                    OnPropertyChanged("Address");
                 }
             }
         }
@@ -77,22 +74,22 @@ namespace TakeHomeChallenge.Model
         {
             get
             {
-                return telephone;
+                return _telephone;
             }
 
             set
             {
-                if (telephone != value)
+                if (_telephone != value)
                 {
-                    telephone = value;
-                    RaisePropertyChanged("Telephone");
+                    _telephone = value;
+                    OnPropertyChanged("Telephone");
                 }
             }
         }
 
+        //InotifyPropertyChanged implementation
         public event PropertyChangedEventHandler PropertyChanged;
-
-        private void RaisePropertyChanged(string property)
+        private void OnPropertyChanged(string property)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
         }

@@ -6,40 +6,38 @@
              xmlns:local="clr-namespace:TakeHomeChallenge.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    
     <Grid>
-        
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition Width="70" />
+            <ColumnDefinition Width="0.3*"/>
+            <ColumnDefinition  />
         </Grid.ColumnDefinitions>
-        <DataGrid SelectionMode="Single" CanUserAddRows="False" AutoGenerateColumns="False" Grid.Column="0" ItemsSource="{Binding People}" SelectedItem="{Binding SelectedPerson, Mode=TwoWay}" >
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Address" Binding="{Binding Address}"/>
-                <DataGridTextColumn Header="Telephone" Binding="{Binding Telephone}" />
-            </DataGrid.Columns>
-            
-            <DataGrid.ItemContainerStyle>
-                <Style TargetType="DataGridRow">
+
+        <StackPanel Background="White" Grid.Column="0" Margin="2" >
+            <Button Content="New Row" Command="{Binding AddCommand}" />
+            <Button Content="Delete Row" Command="{Binding DeleteCommand}" CommandParameter="{Binding SelectedPerson}"/>
+        </StackPanel>
+
+        <DataGrid x:Name="dg"  SelectionMode="Single" CanUserAddRows="False" AutoGenerateColumns="False" Grid.Column="1" Margin="2"      
+                  ItemsSource="{Binding People}" SelectedItem="{Binding SelectedPerson, Mode=TwoWay}" >
+            <DataGrid.Resources>
+                <Style TargetType="DataGridCell">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsActive}" Value="False">
-                            <Setter Property="IsEnabled" Value="False"/>
+                            <Setter Property="Background" Value="Gray"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </DataGrid.ItemContainerStyle>
-
+                
+                
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Address" Binding="{Binding Address, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Telephone" Binding="{Binding Telephone, UpdateSourceTrigger=PropertyChanged}" />
+            </DataGrid.Columns>
+            
             
         </DataGrid>
-
-        <StackPanel Grid.Column="1">
-            <Button Content="Save" Command="{Binding SaveCommand}" />
-            <Button Content="Browse" Command="{Binding BrowseCommand}" />
-            <Button Content="New" Command="{Binding AddCommand}" />
-            <Button Content="Delete" Command="{Binding DeleteCommand}" CommandParameter="{Binding SelectedPerson}"/>
-            <Button Content="Theme" Command="{Binding ChangeTheme}"/>
-        </StackPanel>
-        
     </Grid>
 </UserControl>
+    

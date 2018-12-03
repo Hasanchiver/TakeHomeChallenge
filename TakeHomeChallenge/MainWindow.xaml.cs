@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TakeHomeChallenge.ViewModel;
 
 namespace TakeHomeChallenge
 {
@@ -24,7 +25,7 @@ namespace TakeHomeChallenge
         public MainWindow()
         {
             InitializeComponent();
-      
+            DataContext = new MainWindowViewModel();
         }
 
         
