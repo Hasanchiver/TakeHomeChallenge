@@ -72,7 +72,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\Theme.cs" />
-    <Compile Include="ViewModel\Command.cs" />
+    <Compile Include="Helper\Command.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\PeopleViewModel.cs" />
     <Compile Include="Views\PeopleView.xaml.cs">
